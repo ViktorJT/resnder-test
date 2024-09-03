@@ -13,7 +13,7 @@
         "start:backend": "npm run dev -w backend",
         "build": "npm run build -w frontend && npm run build -w backend",
         "test": "npm run test -w frontend && npm run test -w backend",
-        "prepare": "husky && husky install"
+        "prepare": "if [ \"$CI\" != \"true\" ]; then husky && husky install; fi"
     },
     "devDependencies": {
         "@commitlint/cli": "^19.4.1",
