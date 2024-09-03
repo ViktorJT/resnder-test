@@ -1,25 +1,36 @@
 {
-  "name": "weather-dashboard",
-  "private": true,
-  "version": "1.0.0",
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
-  "scripts": {
-    "start": "npm run start:frontend & npm run start:backend",
-    "start:frontend": "npm run dev -w frontend",
-    "start:backend": "npm run dev -w backend",
-    "build": "npm run build -w frontend && npm run build -w backend",
-    "test": "npm run test -w frontend && npm run test -w backend"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.9.1",
-    "eslint": "^9.9.1",
-    "eslint-config-prettier": "^9.1.0",
-    "globals": "^15.9.0",
-    "prettier": "3.3.3",
-    "typescript": "^5.0.0",
-    "typescript-eslint": "^8.4.0"
-  }
+    "name": "weather-dashboard",
+    "private": true,
+    "type": "module",
+    "version": "1.0.0",
+    "workspaces": [
+        "frontend",
+        "backend"
+    ],
+    "scripts": {
+        "start": "npm run start:frontend & npm run start:backend",
+        "start:frontend": "npm run dev -w frontend",
+        "start:backend": "npm run dev -w backend",
+        "build": "npm run build -w frontend && npm run build -w backend",
+        "test": "npm run test -w frontend && npm run test -w backend",
+        "prepare": "husky && husky install"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^19.4.1",
+        "@commitlint/config-conventional": "^19.4.1",
+        "@eslint/js": "^9.9.1",
+        "eslint": "^9.9.1",
+        "eslint-config-prettier": "^9.1.0",
+        "globals": "^15.9.0",
+        "husky": "^9.1.5",
+        "lint-staged": "^15.2.10",
+        "prettier": "3.3.3",
+        "typescript": "^5.0.0",
+        "typescript-eslint": "^8.4.0"
+    },
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown",
+        "*.js": "eslint --cache --fix",
+        "*.{js,css,md}": "prettier --write"
+    }
 }
