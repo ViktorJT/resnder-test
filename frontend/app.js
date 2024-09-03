@@ -1,4 +1,19 @@
 let modal
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function displayError(message) {
+    const errorDiv = document.createElement('div')
+    errorDiv.textContent = message
+    document.body.appendChild(errorDiv)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function displayLoading() {
+    const loadingDiv = document.createElement('div')
+    loadingDiv.textContent = 'Loading...'
+    document.body.appendChild(loadingDiv)
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const searchButton = document.getElementById('searchBtn')
     const cityButtons = document.querySelectorAll('.city-btn')
@@ -23,6 +38,46 @@ document.addEventListener('DOMContentLoaded', function () {
     customElements.define('weather-info', WeatherInfo)
     customElements.define('weather-forecast', WeatherForecast)
     customElements.define('historical-weather', HistoricalWeather)
+
+    const registrationForm = document.getElementById('registrationForm')
+    const registrationMessage = document.getElementById('registrationMessage')
+
+    registrationForm.addEventListener('submit', async (e) => {
+        e.preventDefault()
+
+        const username = document.getElementById('username').value
+        const password = document.getElementById('password').value
+
+        try {
+            const response = await fetch(
+                'https://render-test-backend-9ybh.onrender.com/register',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                }
+            )
+
+            const data = await response.json()
+
+            if (response.ok) {
+                registrationMessage.textContent = 'Registration successful!'
+                registrationMessage.style.color = 'green'
+                // You might want to clear the form or redirect the user here
+            } else {
+                registrationMessage.textContent =
+                    data.message || 'Registration failed. Please try again.'
+                registrationMessage.style.color = 'red'
+            }
+        } catch (error) {
+            console.error('Error:', error)
+            registrationMessage.textContent =
+                'An error occurred. Please try again later.'
+            registrationMessage.style.color = 'red'
+        }
+    })
 })
 
 let favoriteCities = []
@@ -40,6 +95,7 @@ function getWeather(city) {
             addFavoriteCity(city)
         })
         .catch((error) => {
+            console.log(error)
             weatherInfoComponent.displayError('Failed to fetch weather data.')
         })
 }
@@ -87,9 +143,10 @@ function getForecast(city) {
     fetchCoordinates(city)
         .then((coords) => fetchWeatherData(coords.lat, coords.lon))
         .then((data) => forecastComponent.displayForecast(data))
-        .catch((error) =>
+        .catch((error) => {
+            console.log(error)
             forecastComponent.displayError('Error fetching forecast.')
-        )
+        })
 }
 
 // Fetch and Display Historical Weather Data
@@ -104,11 +161,12 @@ function getHistoricalData(city) {
             const historicalData = data.daily // Mocking historical data
             historicalWeatherComponent.displayHistoricalData(historicalData)
         })
-        .catch((error) =>
+        .catch((error) => {
+            console.log(error)
             historicalWeatherComponent.displayError(
                 'Error fetching historical data.'
             )
-        )
+        })
 }
 
 // Manage Favorite Cities
@@ -145,6 +203,7 @@ function closeSettings() {
 
 function saveSettings() {
     unit = document.getElementById('units').value
+    console.log(unit)
     closeSettings()
 }
 
@@ -240,16 +299,4 @@ function handleSearch() {
         getForecast(cityInput)
         getHistoricalData(cityInput)
     }
-}
-
-function displayError(message) {
-    const errorDiv = document.createElement('div')
-    errorDiv.textContent = message
-    document.body.appendChild(errorDiv)
-}
-
-function displayLoading() {
-    const loadingDiv = document.createElement('div')
-    loadingDiv.textContent = 'Loading...'
-    document.body.appendChild(loadingDiv)
 }
