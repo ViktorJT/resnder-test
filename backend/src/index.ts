@@ -3,11 +3,20 @@ import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import pg from 'pg'
+import cors from 'cors'
 
 dotenv.config()
 
 const app = express()
 app.use(express.json())
+
+app.use(
+    cors({
+        origin: ['http://localhost:5173', 'https://resnder-test.onrender.com'], // Add your frontend URLs here
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    })
+)
 
 const { Pool } = pg
 const pool = new Pool({
