@@ -15,6 +15,10 @@ app.use(express.json())
 //    ssl: { rejectUnauthorized: false },
 //})
 
+app.get('/', (req, res) => {
+    res.send('TEsting testing')
+})
+
 app.post('/register', async (req, res) => {
     console.log('in register route', { req, res })
 
