@@ -1,14 +1,15 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { Pool } from 'pg'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import pg from 'pg'
 
 dotenv.config()
 
 const app = express()
 app.use(express.json())
 
+const { Pool } = pg
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
